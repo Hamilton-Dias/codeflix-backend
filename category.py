@@ -7,8 +7,11 @@ class Category:
     self.description = description
     self.is_active = is_active
 
+    if len(self.name) > 255:
+      raise ValueError("Name must be less than 256 characters")
+
   def __str__(self):
     return f"{self.name} - {self.description} ({self.is_active})"
   
   def __repr__(self):
-    return f"<Category {self.name} ({self.id})"
+    return f"<Category {self.name} ({self.id})>"
