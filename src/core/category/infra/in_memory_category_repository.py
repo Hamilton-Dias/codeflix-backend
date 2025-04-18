@@ -1,4 +1,4 @@
-from core.category.application.category_repository import CategoryRepository
+from src.core.category.application.category_repository import CategoryRepository
 
 
 class InMemoryCategoryRepository(CategoryRepository):

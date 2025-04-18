@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from core.category.application.category_repository import CategoryRepository
-from core.category.application.exceptions import InvalidCategoryData
+from src.core.category.application.category_repository import CategoryRepository
+from src.core.category.application.exceptions import InvalidCategoryData
 from src.core.category.domain.category import Category
 
 @dataclass
@@ -30,4 +30,4 @@ class CreateCategory:
       raise InvalidCategoryData(err)
 
     self.repository.save(category)
-    return category.id
+    return CreateCategoryResponse(id=category.id)
