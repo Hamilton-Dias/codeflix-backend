@@ -1,4 +1,4 @@
-class InMemoryCategpryRepository:
+class InMemoryCategoryRepository:
   def __init__(self, categories=None):
     self.categories = categories or []
 
