@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from core.category.application.category_repository import CategoryRepository
 from core.category.application.exceptions import InvalidCategoryData
-from core.category.infra.in_memory_category_repository import InMemoryCategoryRepository
 from src.core.category.domain.category import Category
 
 @dataclass
@@ -16,7 +16,7 @@ class CreateCategoryResponse:
   id: UUID
 
 class CreateCategory:
-  def __init__(self, repository: InMemoryCategoryRepository):
+  def __init__(self, repository: CategoryRepository):
     self.repository = repository
 
   def execute(self, request: CreateCategoryRequest) -> CreateCategoryResponse:
