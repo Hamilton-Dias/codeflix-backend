@@ -5,3 +5,6 @@ class CategoryRepository(ABC):
   @abstractmethod
   def save(self, category):
     raise NotImplementedError
+
+  def get_by_id(self, id):
+    raise NotImplementedError
