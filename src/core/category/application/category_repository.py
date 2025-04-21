@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from src.core.category.domain.category import Category
+
 
 class CategoryRepository(ABC):
   @abstractmethod
@@ -7,5 +9,9 @@ class CategoryRepository(ABC):
     raise NotImplementedError
 
   @abstractmethod
-  def get_by_id(self, id):
+  def get_by_id(self, id) -> Category | None:
+    raise NotImplementedError
+  
+  @abstractmethod
+  def delete(self, id) -> None:
     raise NotImplementedError
