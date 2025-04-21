@@ -1,0 +1,59 @@
+from unittest.mock import create_autospec
+from src.core.category.application.category_repository import CategoryRepository
+from src.core.category.application.use_cases.list_category import CategoryOutput, ListCategory, ListCategoryRequest, ListCategoryResponse
+from src.core.category.domain.category import Category
+
+
+class TestListCategory:
+  def test_when_no_categories_in_repository_then_return_empty_list(self):
+    mock = create_autospec(CategoryRepository)
+    mock.list.return_value = []
+
+    use_case = ListCategory(repository=mock)
+    request = ListCategoryRequest()
+
+    response = use_case.execute(request)
+
+    assert response == ListCategoryResponse(data=[])
+
+  def test_when_categories_in_repository_then_return_list(self):
+    categories = [
+      Category(
+        id='1',
+        name='Category 1',
+        description='Description 1',
+        is_active=True
+      ),
+      Category(
+        id='2',
+        name='Category 2',
+        description='Description 2',
+        is_active=True
+      )
+    ]
+
+    mock = create_autospec(CategoryRepository)
+    mock.list.return_value = categories
+
+    use_case = ListCategory(repository=mock)
+    request = ListCategoryRequest()
+
+    response = use_case.execute(request)
+
+    assert response == ListCategoryResponse(
+      data=[
+        CategoryOutput(
+          id=categories[0].id,
+          name=categories[0].name,
+          description=categories[0].description,
+          is_active=categories[0].is_active
+        ),
+        CategoryOutput(
+          id=categories[1].id,
+          name=categories[1].name,
+          description=categories[1].description,
+          is_active=categories[1].is_active
+        )
+      ]
+    )
+
