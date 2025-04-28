@@ -22,20 +22,22 @@ class TestCategoryAPI(APITestCase):
     url = '/api/categories/'
     response = self.client.get(url)
 
-    expected_data = [
-      {
-        "id": str(category_movie.id),
-        "name": category_movie.name,
-        "description": category_movie.description,
-        "is_active": category_movie.is_active
-      },
-      {
-        "id": str(category_series.id),
-        "name": category_series.name,
-        "description": category_series.description,
-        "is_active": category_series.is_active
-      }
-    ]
+    expected_data = {
+      "data": [
+        {
+          "id": str(category_movie.id),
+          "name": category_movie.name,
+          "description": category_movie.description,
+          "is_active": category_movie.is_active
+        },
+        {
+          "id": str(category_series.id),
+          "name": category_series.name,
+          "description": category_series.description,
+          "is_active": category_series.is_active
+        }
+      ]
+    }
 
     self.assertEqual(response.status_code, HTTP_200_OK)
     self.assertEqual(response.data, expected_data)

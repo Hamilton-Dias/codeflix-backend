@@ -37,10 +37,12 @@ class TestRetrieveAPI:
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data == {
-      "id": str(category_documentary.id),
-      "name": category_documentary.name,
-      "description": category_documentary.description,
-      "is_active": category_documentary.is_active
+      "data": {
+        "id": str(category_documentary.id),
+        "name": category_documentary.name,
+        "description": category_documentary.description,
+        "is_active": category_documentary.is_active
+      }
     }
 
   def test_return_404_when_not_found(self) -> None:
