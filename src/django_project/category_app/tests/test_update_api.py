@@ -11,7 +11,7 @@ def category_repository() -> DjangoORMCategoryRepository:
 
 @pytest.mark.django_db
 class TestUpdateAPI:
-  def test_when_payload_is_invalid_then_return_400(self, category_repository: DjangoORMCategoryRepository):
+  def test_when_payload_is_invalid_then_return_400(self):
     response = APIClient().put('/api/categories/123123123/', data={
       "name": "", 
       "description": "test"
