@@ -3,7 +3,7 @@ from uuid import UUID
 
 from src.core.category.domain.category_repository import CategoryRepository
 from src.core.genre.application.exceptions import InvalidGenre, RelatedCategoriesNotFound
-from src.core.genre.domain.category_repository import GenreRepository
+from src.core.genre.domain.genre_repository import GenreRepository
 from src.core.genre.domain.genre import Genre
 
 class CreateGenre:
