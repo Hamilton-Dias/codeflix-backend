@@ -9,7 +9,7 @@ from src.core.category.application.use_cases.delete_category import DeleteCatego
 from src.core.category.application.use_cases.exceptions import CategoryNotFound
 from src.core.category.application.use_cases.get_category import GetCategory, GetCategoryRequest
 from src.core.category.application.use_cases.list_category import ListCategory, ListCategoryRequest
-from django_project.category_app.repository import DjangoORMCategoryRepository
+from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from uuid import UUID
 
 from src.core.category.application.use_cases.update_category import UpdateCategory, UpdateCategoryRquest
