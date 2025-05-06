@@ -63,7 +63,7 @@ class CategoryViewSet(viewsets.ViewSet):
     serializer = UpdateCategoryRequestSerializer(
       data={
         **request.data,
-        "id": pk
+        "id": pk  
       }
     )
     serializer.is_valid(raise_exception=True)
