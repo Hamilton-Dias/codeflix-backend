@@ -5,7 +5,7 @@ from src.core.category.domain.category import Category
 from src.core.genre.domain.genre import Genre
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from src.django_project.genre_app.repository import DjangoORMGenreRepository
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_204_NO_CONTENT
 from rest_framework.test import APIClient
 
 @pytest.fixture
@@ -117,3 +117,36 @@ class TestCreateAPI:
 
     assert response.status_code == HTTP_400_BAD_REQUEST
     assert response.data == {"name": ["This field may not be blank."]}
+
+@pytest.mark.django_db
+class TestDeleteAPI:
+  def test_when_genre_not_exist_then_return_404(self) -> None:
+    url = f"/api/genres/{uuid4()}/"
+    response = APIClient().delete(url)
+
+    assert response.status_code == HTTP_404_NOT_FOUND
+
+  def test_when_genre_pk_is_invalid_then_return_400(self) -> None:
+    url = "/api/genres/invalid_pk/"
+    response = APIClient().delete(url)
+
+    assert response.status_code == HTTP_400_BAD_REQUEST
+    assert response.data == {"id": ["Must be a valid UUID."]}
+
+  def test_when_genre_found_then_delete_genre(
+    self,
+    category_repository: DjangoORMCategoryRepository,
+    category_movie: Category,
+    category_documentary: Category,
+    genre_repository: DjangoORMGenreRepository,
+    genre_romance: Genre,
+  ) -> None:
+    category_repository.save(category_movie)
+    category_repository.save(category_documentary)
+    genre_repository.save(genre_romance)
+
+    url = f"/api/genres/{str(genre_romance.id)}/"
+    response = APIClient().delete(url)
+
+    assert response.status_code == HTTP_204_NO_CONTENT
+    assert genre_repository.get_by_id(genre_romance.id) is None
