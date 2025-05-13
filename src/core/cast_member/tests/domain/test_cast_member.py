@@ -50,3 +50,34 @@ class TestCastMember:
       type=cast_member_type
     )
     assert repr(cast_member) == f"<CastMember {cast_member_name} ({cast_member_id})>"
+
+class TestUpdateCastMember:
+  def test_update_cast_member_with_nameand_description(self):
+    cast_member = CastMember(name='CastMember 1', type=CastMemberType.DIRECTOR)
+    cast_member.update_cast_member(name='CastMember 2', type=CastMemberType.ACTOR)
+    assert cast_member.name == 'CastMember 2'
+    assert cast_member.type == CastMemberType.ACTOR
+
+  def test_update_cast_member_with_invalid_name(self):
+    cast_member = CastMember(name='CastMember 1', type=CastMemberType.DIRECTOR)
+    with pytest.raises(ValueError):
+      cast_member.update_cast_member(name='', type=CastMemberType.ACTOR)
+
+class TestEquality:
+  def test_when_categories_have_same_id_they_are_equal(self):
+    common_id = uuid.uuid4()
+    cast_member_1 = CastMember(name="Filme", id=common_id)
+    cast_member_2 = CastMember(name="Filme", id=common_id)
+
+    assert cast_member_1 == cast_member_2
+
+  def test_equality_different_classes(self):
+    class Dummy:
+      pass
+
+    common_id = uuid.uuid4()
+    cast_member = CastMember(name="Filme", id=common_id)
+    dummy = Dummy()
+    dummy.id = common_id
+
+    assert cast_member != dummy

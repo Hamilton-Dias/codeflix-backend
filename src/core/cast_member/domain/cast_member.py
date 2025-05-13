@@ -36,4 +36,8 @@ class CastMember:
   def __eq__(self, other):
     return isinstance(other, CastMember) and self.id == other.id
   
-  
+  def update_cast_member(self, name, type):
+    self.name = name
+    self.type = type
+
+    self.validate()
