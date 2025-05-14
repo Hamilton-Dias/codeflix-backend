@@ -4,6 +4,8 @@ from dataclasses import field
 import uuid
 from enum import StrEnum
 
+from src.core.category.domain.notification import Notification
+
 class CastMemberType(StrEnum):
   ACTOR = "ACTOR"
   DIRECTOR = "DIRECTOR"
@@ -14,21 +16,26 @@ class CastMember:
   name: str = ""
   type: CastMemberType = CastMemberType.ACTOR
 
+  notification: Notification = field(default_factory=Notification)
+
   def __post_init__(self):
     self.validate()
 
   def validate(self):
     if not self.name:
-      raise ValueError("Name must be provided")
+      self.notification.add_error("Name must be provided")
     
     if self.name == '':
-      raise ValueError("Name must not be empty")
+      self.notification.add_error("Name must not be empty")
     
     if not self.type:
-      raise ValueError("Type must be provided")
+      self.notification.add_error("Type must be provided")
     
     if self.type not in CastMemberType:
-      raise ValueError("Type must be valid")
+      self.notification.add_error("Type must be valid")
+    
+    if self.notification.has_errors:
+      raise ValueError(self.notification.messages)
     
   def __repr__(self):
     return f"<CastMember {self.name} ({self.id})>"
