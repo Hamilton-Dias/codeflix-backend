@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from uuid import UUID
 from dataclasses import field
 import uuid
-from enum import StrEnum, auto
+from enum import StrEnum
 
 class CastMemberType(StrEnum):
-  ACTOR = auto()
-  DIRECTOR = auto()
+  ACTOR = "ACTOR"
+  DIRECTOR = "DIRECTOR"
 
 @dataclass
 class CastMember:

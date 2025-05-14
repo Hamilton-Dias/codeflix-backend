@@ -27,7 +27,8 @@ class TestCreateCastMember:
       mock = MagicMock(CastMemberRepository)
       use_case = CreateCastMember(repository=mock)
       request = CreateCastMemberRequest(
-        name=""
+        name="",
+        type=CastMemberType.ACTOR
       )
 
       with pytest.raises(InvalidCastMemberData) as exc_info:        

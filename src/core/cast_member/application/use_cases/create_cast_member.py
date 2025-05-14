@@ -8,7 +8,6 @@ from src.core.cast_member.domain.cast_member import CastMember, CastMemberType
 @dataclass
 class CreateCastMemberRequest:
   name: str
-  description: str = ""
   type: CastMemberType
 
 @dataclass

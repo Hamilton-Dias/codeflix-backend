@@ -17,5 +17,5 @@ class TestCreateCastMember:
 
     assert response.id is not None
     assert isinstance(response.id, UUID)
-    assert repository.categories[0].id == response.id
-    assert len(repository.categories) == 1
+    assert repository.cast_members[0].id == response.id
+    assert len(repository.cast_members) == 1
