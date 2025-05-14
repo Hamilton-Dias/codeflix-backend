@@ -54,8 +54,22 @@ class TestCategory:
     assert str(category) == f"{category_name} - {category_description} ({category_is_active})"
 
   def test_cannot_create_category_with_empty_name(self):
-      with pytest.raises(ValueError):
-          Category(name="")
+    with pytest.raises(ValueError):
+      Category(name="")
+  
+  def test_description_must_have_less_than_1024_characters(self):
+    with pytest.raises(ValueError):
+      Category(
+        name='Category 1',
+        description='a' * 1025
+      )
+
+  def test_name_and_description_are_invalid(self):
+    with pytest.raises(ValueError, match="^Name must be less than 256 characters, Description must be less than 1024 characters$"):
+      Category(
+        name='a' * 256,
+        description='a' * 1025
+      )
 
   def test_category_repr_prints_correctly(self):
     category_id = uuid.uuid4()
