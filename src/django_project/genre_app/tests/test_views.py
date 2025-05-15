@@ -89,11 +89,12 @@ class TestCreateAPI:
     genre_repository: DjangoORMGenreRepository,
   ) -> None:
     category_repository.save(category_movie)
+    category_repository.save(category_documentary)
 
     url = "/api/genres/"
     data = {
       "name": "Romance",
-      "category_ids": [str(category_movie.id), str(category_documentary.id)],
+      "categories": [str(category_movie.id), str(category_documentary.id)],
     }
     response = APIClient().post(url, data=data)
 

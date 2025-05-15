@@ -1,22 +1,15 @@
 from dataclasses import dataclass
-from uuid import UUID
-from dataclasses import field
-import uuid
 from enum import StrEnum
-
-from src.core.category.domain.notification import Notification
+from src.core._shared.entity import Entity
 
 class CastMemberType(StrEnum):
   ACTOR = "ACTOR"
   DIRECTOR = "DIRECTOR"
 
 @dataclass
-class CastMember:
-  id: UUID = field(default_factory=uuid.uuid4)
+class CastMember(Entity):
   name: str = ""
   type: CastMemberType = CastMemberType.ACTOR
-
-  notification: Notification = field(default_factory=Notification)
 
   def __post_init__(self):
     self.validate()
@@ -39,9 +32,6 @@ class CastMember:
     
   def __repr__(self):
     return f"<CastMember {self.name} ({self.id})>"
-  
-  def __eq__(self, other):
-    return isinstance(other, CastMember) and self.id == other.id
   
   def update_cast_member(self, name, type):
     self.name = name

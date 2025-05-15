@@ -1,18 +1,12 @@
 from dataclasses import dataclass
-from uuid import UUID
-from dataclasses import field
-import uuid
-
-from src.core.category.domain.notification import Notification
+from src.core._shared.entity import Entity
+from src.core._shared.notification import Notification
 
 @dataclass
-class Category:
+class Category(Entity):
   name: str
-  id: UUID = field(default_factory=uuid.uuid4)
   description: str = ""
   is_active: bool = True
-
-  notification: Notification = field(default_factory=Notification)
 
   def __post_init__(self):
     self.validate()
@@ -35,9 +29,6 @@ class Category:
   
   def __repr__(self):
     return f"<Category {self.name} ({self.id})>"
-  
-  def __eq__(self, other):
-    return isinstance(other, Category) and self.id == other.id
   
   def update_category(self, name, description):
     self.name = name

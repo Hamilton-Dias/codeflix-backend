@@ -90,7 +90,7 @@ class TestEquality:
   def test_when_genres_have_same_id_they_are_equal(self):
     common_id = uuid.uuid4()
     genre_1 = Genre(name="Romance", id=common_id)
-    genre_2 = Genre(name="Acao", id=common_id)
+    genre_2 = Genre(name="Romance", id=common_id)
 
     assert genre_1 == genre_2
 
