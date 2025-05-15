@@ -6,7 +6,7 @@ from src.core.cast_member.domain.cast_member_repository import CastMemberReposit
 
 @dataclass
 class ListCastMemberRequest:
-  pass
+  order_by: str = "name"
 
 @dataclass
 class CastMemberOutput:
@@ -27,11 +27,11 @@ class ListCastMember:
     cast_members = self.repository.list()
     
     return ListCastMemberResponse(
-      data=[
+      data=sorted([
         CastMemberOutput(
           id=cast_member.id,
           name=cast_member.name,
           type=cast_member.type
         ) for cast_member in cast_members
-      ]
+      ], key=lambda cast_member: getattr(cast_member, request.order_by))
     )

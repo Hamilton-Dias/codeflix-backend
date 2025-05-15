@@ -15,8 +15,11 @@ from src.django_project.genre_app.serializers import CreateGenreInputSerializer,
 
 class GenreViewSet(viewsets.ViewSet):
   def list(self, request: Request) -> Response:
+    order_by = request.query_params.get("order_by", "name")
     use_case = ListGenre(repository=DjangoORMGenreRepository())
-    output: ListGenre.Output = use_case.execute(input=ListGenre.Input)
+    output: ListGenre.Output = use_case.execute(input=ListGenre.Input(
+      order_by=order_by
+    ))
     reponse_serializer = ListGenreOutputSerializer(output)
     
     return Response(
