@@ -10,6 +10,9 @@ class MessageBus(AbstractMessageBus):
 
   def handle(self, events: list[Event]) -> None:
     for event in events:
-      handlers = self.handlers[type(event)]
+      handlers = self.handlers.get(type(event), [])
       for handler in handlers:
-        handler.handle(event)
+        try:
+          handler.handle(event)
+        except Exception as exception:
+          print(exception)

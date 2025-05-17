@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum, auto, unique
+from enum import Enum, StrEnum, auto, unique
 from uuid import UUID
 
 @unique
@@ -10,9 +10,12 @@ class MediaStatus(Enum):
   ERROR = auto()
 
 @unique
-class MediaType(Enum):
-  VIDEO = "VIDEO"
-  TRAILER = "TRAILER"
+class MediaType(StrEnum):
+    VIDEO = "VIDEO"
+    TRAILER = "TRAILER"
+    BANNER = "BANNER"
+    THUMBNAIL = "THUMBNAIL"
+    THUMBNAIL_HALF = "THUMBNAIL_HALF"
 
 @unique
 class Rating(Enum):
