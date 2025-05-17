@@ -36,7 +36,12 @@ class TestListAPI(APITestCase):
           "description": category_series.description,
           "is_active": category_series.is_active
         }
-      ]
+      ],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 2
+      }
     }
 
     self.assertEqual(response.status_code, HTTP_200_OK)

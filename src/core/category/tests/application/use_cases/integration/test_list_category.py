@@ -1,4 +1,4 @@
-from src.core.category.application.use_cases.list_category import CategoryOutput, ListCategory, ListCategoryRequest, ListCategoryResponse
+from src.core.category.application.use_cases.list_category import CategoryOutput, ListCategory, ListCategoryRequest, ListCategoryResponse, ListOutputMeta
 from src.core.category.domain.category import Category
 
 from src.core.category.infra.in_memory_category_repository import InMemoryCategoryRepository
@@ -12,7 +12,14 @@ class TestListCategory:
 
     response = use_case.execute(request)
 
-    assert response == ListCategoryResponse(data=[])
+    assert response == ListCategoryResponse(
+      data=[], 
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=0
+      )
+    )
 
   def test_return_existing_categories(self):
     categories = [
@@ -53,6 +60,11 @@ class TestListCategory:
           description=categories[1].description,
           is_active=categories[1].is_active
         )
-      ]
+      ],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=2
+      )
     )
 

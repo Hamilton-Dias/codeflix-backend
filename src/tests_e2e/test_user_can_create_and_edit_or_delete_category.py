@@ -8,7 +8,14 @@ class TestCreateAndEditOrDeleteCategory:
 
     # Verifica que lista esta vazia
     list_response = api_client.get('/api/categories/')
-    assert list_response.data == {"data": []}
+    assert list_response.data == {
+      "data": [],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 0
+      }
+    }
 
     # Criar uma categoria
     create_response = api_client.post(
@@ -31,7 +38,12 @@ class TestCreateAndEditOrDeleteCategory:
           "description": "Category 1 description",
           "is_active": True
         }
-      ]
+      ],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 1
+      }
     }
 
     # Edita categoria criada
@@ -55,7 +67,12 @@ class TestCreateAndEditOrDeleteCategory:
           "description": "Category 1 description updated",
           "is_active": False
         }
-      ]
+      ],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 1
+      }
     }
 
   def test_user_can_create_and_delete_category(self) -> None:
@@ -63,7 +80,14 @@ class TestCreateAndEditOrDeleteCategory:
 
     # Verifica que lista esta vazia
     list_response = api_client.get('/api/categories/')
-    assert list_response.data == {"data": []}
+    assert list_response.data == {
+      "data": [],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 0
+      }
+    }
 
     # Criar uma categoria
     create_response = api_client.post(
@@ -86,7 +110,12 @@ class TestCreateAndEditOrDeleteCategory:
           "description": "Category 1 description",
           "is_active": True
         }
-      ]
+      ],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 1
+      }
     }
 
     # deleta categoria criada
@@ -95,4 +124,11 @@ class TestCreateAndEditOrDeleteCategory:
 
     # Verifica que categoria editada aparece na listagem
     list_response = api_client.get('/api/categories/')
-    assert list_response.data == {"data": []}
+    assert list_response.data == {
+      "data": [],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 0
+      }
+    }

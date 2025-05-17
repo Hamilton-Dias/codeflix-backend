@@ -1,6 +1,6 @@
 from unittest.mock import create_autospec
 from src.core.category.domain.category_repository import CategoryRepository
-from src.core.category.application.use_cases.list_category import CategoryOutput, ListCategory, ListCategoryRequest, ListCategoryResponse
+from src.core.category.application.use_cases.list_category import CategoryOutput, ListCategory, ListCategoryRequest, ListCategoryResponse, ListOutputMeta
 from src.core.category.domain.category import Category
 
 
@@ -14,7 +14,14 @@ class TestListCategory:
 
     response = use_case.execute(request)
 
-    assert response == ListCategoryResponse(data=[])
+    assert response == ListCategoryResponse(
+      data=[],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=0
+      )
+    )
 
   def test_when_categories_in_repository_then_return_list(self):
     categories = [
@@ -54,6 +61,11 @@ class TestListCategory:
           description=categories[1].description,
           is_active=categories[1].is_active
         )
-      ]
+      ],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=2
+      )
     )
 
