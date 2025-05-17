@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from uuid import UUID
 from src.core.genre.domain.genre_repository import GenreRepository
+from src.core._shared.pagination import ListOutputMeta
+from src.core._shared import pagination
 
 @dataclass
 class GenreOutput:
@@ -8,12 +10,6 @@ class GenreOutput:
   name: str
   is_active: bool
   categories: set[UUID]
-
-@dataclass
-class ListOutputMeta:
-  current_page: int
-  per_page: int
-  total_items: int
 
 class ListGenre:
   def __init__(self, repository: GenreRepository):
@@ -41,15 +37,14 @@ class ListGenre:
       ) for genre in genres
     ], key=lambda genre: getattr(genre, input.order_by))
 
-    DEFAULT_PAGE_SIZE = 2
-    page_offset = (input.current_page - 1) * DEFAULT_PAGE_SIZE
-    genres_page = mapped_genres[page_offset:page_offset + DEFAULT_PAGE_SIZE]
+    page_offset = (input.current_page - 1) * pagination.DEFAULT_PAGE_SIZE
+    genres_page = mapped_genres[page_offset:page_offset + pagination.DEFAULT_PAGE_SIZE]
 
     return self.Output(
       data=genres_page,
       meta=ListOutputMeta(
         current_page=input.current_page,
-        per_page=DEFAULT_PAGE_SIZE,
+        per_page=pagination.DEFAULT_PAGE_SIZE,
         total_items=len(genres_page)
       )
     )

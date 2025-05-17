@@ -3,6 +3,8 @@ from uuid import UUID
 
 from src.core.cast_member.domain.cast_member import CastMemberType
 from src.core.cast_member.domain.cast_member_repository import CastMemberRepository
+from src.core._shared.pagination import ListOutputMeta
+from src.core._shared import pagination
 
 @dataclass
 class ListCastMemberRequest:
@@ -14,12 +16,6 @@ class CastMemberOutput:
   id: UUID
   name: str
   type: CastMemberType
-
-@dataclass
-class ListOutputMeta:
-  current_page: int
-  per_page: int
-  total_items: int
 
 @dataclass
 class ListCastMemberResponse:
@@ -41,15 +37,14 @@ class ListCastMember:
         ) for cast_member in cast_members
       ], key=lambda cast_member: getattr(cast_member, request.order_by))
     
-    DEFAULT_PAGE_SIZE = 2
-    page_offset = (request.current_page - 1) * DEFAULT_PAGE_SIZE
-    cast_members_page = sorted_cast_members[page_offset:page_offset + DEFAULT_PAGE_SIZE]
+    page_offset = (request.current_page - 1) * pagination.DEFAULT_PAGE_SIZE
+    cast_members_page = sorted_cast_members[page_offset:page_offset + pagination.DEFAULT_PAGE_SIZE]
     
     return ListCastMemberResponse(
       data=cast_members_page,
       meta=ListOutputMeta(
         current_page=request.current_page,
-        per_page=DEFAULT_PAGE_SIZE,
+        per_page=pagination.DEFAULT_PAGE_SIZE,
         total_items=len(sorted_cast_members)
       )
     )
