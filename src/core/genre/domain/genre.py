@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 from dataclasses import field
 
-from src.core._shared.entity import Entity
+from src.core._shared.domain.entity import Entity
 
 @dataclass
 class Genre(Entity):

@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 from uuid import UUID
 
-from src.core._shared.entity import Entity
+from src.core._shared.domain.entity import Entity
 from src.core.video.domain.value_objets import AudioVideoMedia, ImageMedia, Rating
 
 
@@ -12,8 +12,9 @@ class Video(Entity):
   description: str
   launch_year: int
   duration: Decimal
-  published: bool
   rating: Rating
+  opened: bool
+  published: bool = field(default=False, init=False)
 
   categories: set[UUID]
   genres: set[UUID]
@@ -38,13 +39,14 @@ class Video(Entity):
     if self.notification.has_errors:
       raise ValueError(self.notification.messages)
 
-  def update(self, title, description, launch_year, duration, published, rating):
+  def update(self, title, description, launch_year, duration, published, rating, opened):
     self.title = title
     self.description = description
     self.launch_year = launch_year
     self.duration = duration
     self.published = published
     self.rating = rating
+    self.opened = opened
 
     self.validate()
 

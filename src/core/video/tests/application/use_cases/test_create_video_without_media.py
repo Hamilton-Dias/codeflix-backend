@@ -39,7 +39,7 @@ class TestCreateVideoWithoutMedia:
       launch_year=2023,
       duration=120,
       rating=Rating.L,
-      published=False,
+      opened=False,
       categories={category.id},
       genres={genre.id},
       cast_members={cast_member.id}
@@ -51,7 +51,7 @@ class TestCreateVideoWithoutMedia:
     assert len(video_repo.videos) == 1
     saved_video = video_repo.videos[0]
     assert saved_video.title == "Test Video"
-    assert saved_video.published is False
+    assert saved_video.opened is False
 
   def test_execute_with_invalid_title(self):
     video_repo = InMemoryVideoRepository()
@@ -71,7 +71,7 @@ class TestCreateVideoWithoutMedia:
       description="Test Description",
       launch_year=2023,
       duration=120,
-      published=False,
+      opened=False,
       rating=Rating.L,
       categories=set(),
       genres=set(),
@@ -100,7 +100,7 @@ class TestCreateVideoWithoutMedia:
       description="Test Description",
       launch_year=2023,
       duration=120,
-      published=False,
+      opened=False,
       rating=Rating.L,
       categories={fake_id},
       genres={fake_id},

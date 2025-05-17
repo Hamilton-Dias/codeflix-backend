@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from src.core._shared.entity import Entity
-from src.core._shared.notification import Notification
+from src.core._shared.domain.entity import Entity
+from src.core._shared.domain.notification import Notification
 
 @dataclass
 class Category(Entity):

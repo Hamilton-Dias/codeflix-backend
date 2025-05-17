@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID
 
-from src.core._shared.notification import Notification
+from src.core._shared.domain.notification import Notification
 from src.core.cast_member.domain.cast_member_repository import CastMemberRepository
 from src.core.category.domain.category_repository import CategoryRepository
 from src.core.genre.domain.genre_repository import GenreRepository
@@ -20,7 +20,7 @@ class CreateVideoWithoutMediaUseCase:
     description: str
     launch_year: int
     duration: Decimal
-    published: bool
+    opened: bool
     rating: str
     categories: set[UUID]
     genres: set[UUID]
@@ -58,7 +58,7 @@ class CreateVideoWithoutMediaUseCase:
         description=input.description,
         launch_year=input.launch_year,
         duration=input.duration,
-        published=False,
+        opened=input.opened,
         rating=input.rating,
         categories=input.categories,
         genres=input.genres,

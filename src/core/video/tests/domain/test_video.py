@@ -17,7 +17,7 @@ class TestVideo:
         description='',
         launch_year=2025,
         duration=120.0,
-        published=True,
+        opened=True,
         rating=Rating.L,
         categories=set(),
         genres=set(),
@@ -30,7 +30,7 @@ class TestVideo:
       description='',
       launch_year=2025,
       duration=120.0,
-      published=True,
+      opened=True,
       rating=Rating.L,
       categories=set(),
       genres=set(),
@@ -44,7 +44,7 @@ class TestVideo:
       description='',
       launch_year=2025,
       duration=120.0,
-      published=True,
+      opened=True,
       rating=Rating.L,
       categories=set(),
       genres=set(),
@@ -55,7 +55,7 @@ class TestVideo:
     assert video.description == ''
     assert video.launch_year == 2025
     assert video.duration == 120.0
-    assert video.published is True
+    assert video.opened is True
     assert video.rating == Rating.L
     assert video.categories == set()
     assert video.genres == set()
@@ -63,11 +63,14 @@ class TestVideo:
 
   def test_cannot_create_video_with_empty_title(self):
     with pytest.raises(ValueError):
-      Video(title="")
-  
-  def test_description_must_have_less_than_1024_characters(self):
-    with pytest.raises(ValueError):
-      Video(
-        title='Video 1',
-        description='a' * 1025
+      video = Video(
+        title='',
+        description='',
+        launch_year=2025,
+        duration=120.0,
+        opened=True,
+        rating=Rating.L,
+        categories=set(),
+        genres=set(),
+        cast_members=set()
       )

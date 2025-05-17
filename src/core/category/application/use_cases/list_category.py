@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from uuid import UUID
 
 from src.core.category.domain.category_repository import CategoryRepository
-from src.core._shared.pagination import ListOutputMeta
-from src.core._shared import pagination
+from src.core._shared.domain.pagination import ListOutputMeta
+from src.core._shared.domain import pagination
 
 @dataclass
 class ListCategoryRequest:

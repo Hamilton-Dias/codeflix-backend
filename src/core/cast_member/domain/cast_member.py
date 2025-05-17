@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import StrEnum
-from src.core._shared.entity import Entity
+from src.core._shared.domain.entity import Entity
 
 class CastMemberType(StrEnum):
   ACTOR = "ACTOR"

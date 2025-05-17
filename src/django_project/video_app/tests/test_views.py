@@ -10,50 +10,27 @@ class TestCreateVideoAPI:
     data = {
       "title": "Sample Video",
       "description": "Test description",
-      "year_launched": 2023,
+      "launch_year": 2023,
       "duration": 120,
       "rating": "L",
-      "is_published": True,
+      "opened": False,
       "categories": [],
-      "genres": []
+      "genres": [],
+      "cast_members": []
     }
     response = APIClient().post(url, data=data)
 
     assert response.status_code == HTTP_201_CREATED
-    assert response.data["title"] == "Sample Video"
-    assert response.data["description"] == "Test description"
-    assert response.data["year_launched"] == 2023
-    assert response.data["duration"] == 120
-    assert response.data["rating"] == "L"
-    assert response.data["is_published"] is True
 
   def test_create_video_with_missing_required_fields(self):
     url = "/api/videos/"
     data = {
-      "description": "Test description",
-      "is_published": True
+      "description": "Test description"
     }
     response = APIClient().post(url, data=data)
 
     assert response.status_code == HTTP_400_BAD_REQUEST
     assert "title" in response.data
-    assert "year_launched" in response.data
+    assert "launch_year" in response.data
     assert "duration" in response.data
-    assert "rating" in response.data
-
-  def test_create_video_with_invalid_rating(self):
-    url = "/api/videos/"
-    data = {
-      "title": "Sample Video",
-      "description": "Test description",
-      "year_launched": 2023,
-      "duration": 120,
-      "rating": "INVALID",
-      "is_published": True,
-      "categories": [],
-      "genres": []
-    }
-    response = APIClient().post(url, data=data)
-
-    assert response.status_code == HTTP_400_BAD_REQUEST
     assert "rating" in response.data

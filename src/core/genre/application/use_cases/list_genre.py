@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from uuid import UUID
 from src.core.genre.domain.genre_repository import GenreRepository
-from src.core._shared.pagination import ListOutputMeta
-from src.core._shared import pagination
+from src.core._shared.domain.pagination import ListOutputMeta
+from src.core._shared.domain import pagination
 
 @dataclass
 class GenreOutput:
