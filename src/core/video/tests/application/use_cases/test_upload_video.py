@@ -1,8 +1,8 @@
 from pathlib import Path
 from unittest.mock import create_autospec
-from src.core._shared.storage.abstract_storage_service import AbstractStorageService
+from src.core._shared.infrastructure.storage.abstract_storage_service import AbstractStorageService
 from src.core.video.application.use_cases.upload_video import UploadVideo
-from src.core.video.domain.value_objets import AudioVideoMedia, MediaStatus, Rating
+from src.core.video.domain.value_objets import AudioVideoMedia, MediaStatus, MediaType, Rating
 from src.core.video.domain.video import Video
 from src.core.video.infra.in_memory_video_repository import InMemoryVideoRepository
 
@@ -14,7 +14,7 @@ class TestUploadVideo:
       description="Description",
       launch_year=2024,
       duration=100,
-      published=False,
+      opened=False,
       rating=Rating.L,
       categories=set(),
       genres=set(),
@@ -49,5 +49,6 @@ class TestUploadVideo:
       name="video.mp4",
       raw_location=str(Path("videos") / str(video.id) / "video.mp4"),
       encoded_location="",
-      status=MediaStatus.PENDING
+      status=MediaStatus.PENDING,
+      media_type=MediaType.VIDEO
     )

@@ -4,7 +4,7 @@ from dataclasses import field
 
 from src.core._shared.domain.entity import Entity
 
-@dataclass
+@dataclass(eq=False)
 class Genre(Entity):
   name: str
   is_active: bool = True

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from uuid import UUID
 
-from src.core._shared.storage.abstract_storage_service import AbstractStorageService
+from src.core._shared.infrastructure.storage.abstract_storage_service import AbstractStorageService
 from src.core.video.application.exceptions import VideoNotFound
 from src.core.video.domain.value_objets import AudioVideoMedia, MediaStatus
 from src.core.video.domain.video_repository import VideoRepository
@@ -46,7 +46,8 @@ class UploadVideo:
       name=input.file_name,
       raw_location=str(file_path),
       encoded_location="",
-      status=MediaStatus.PENDING
+      status=MediaStatus.PENDING,
+      media_type=input.content_type.split("/")[0]
     )
 
     video.update_video(audio_video_media)

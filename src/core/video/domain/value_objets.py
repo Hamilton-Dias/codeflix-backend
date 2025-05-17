@@ -10,6 +10,11 @@ class MediaStatus(Enum):
   ERROR = auto()
 
 @unique
+class MediaType(Enum):
+  VIDEO = "VIDEO"
+  TRAILER = "TRAILER"
+
+@unique
 class Rating(Enum):
   ER = auto()
   L = auto()
@@ -30,3 +35,4 @@ class AudioVideoMedia:
   raw_location: str
   encoded_location: str
   status: MediaStatus
+  media_type: MediaType

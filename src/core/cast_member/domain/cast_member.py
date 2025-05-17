@@ -6,7 +6,7 @@ class CastMemberType(StrEnum):
   ACTOR = "ACTOR"
   DIRECTOR = "DIRECTOR"
 
-@dataclass
+@dataclass(eq=False)
 class CastMember(Entity):
   name: str = ""
   type: CastMemberType = CastMemberType.ACTOR

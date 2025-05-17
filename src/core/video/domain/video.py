@@ -3,10 +3,11 @@ from decimal import Decimal
 from uuid import UUID
 
 from src.core._shared.domain.entity import Entity
-from src.core.video.domain.value_objets import AudioVideoMedia, ImageMedia, Rating
+from src.core.video.domain.events.event import AudioVideoMediaUpdated
+from src.core.video.domain.value_objets import AudioVideoMedia, ImageMedia, MediaType, Rating
 
 
-@dataclass
+@dataclass(eq=False)
 class Video(Entity):
   title: str
   description: str
@@ -81,4 +82,9 @@ class Video(Entity):
   def update_video(self, video: AudioVideoMedia) -> None:
     self.video = video
     self.validate()
+    self.dispatch(AudioVideoMediaUpdated(
+      aggregate_id=self.id,
+      file_path=video.raw_location,
+      media_type=MediaType.VIDEO
+    ))
 

@@ -2,8 +2,9 @@ import pytest
 import uuid
 
 from uuid import UUID
+from src.core.video.domain.events.event import AudioVideoMediaUpdated
 from src.core.video.domain.video import Video
-from src.core.video.domain.value_objets import Rating
+from src.core.video.domain.value_objets import AudioVideoMedia, MediaStatus, MediaType, Rating
 
 class TestVideo:
   def test_title_is_required(self):
@@ -74,3 +75,37 @@ class TestVideo:
         genres=set(),
         cast_members=set()
       )
+
+class TestUpdateVideoMedia:
+  def test_update_video_and_dispatch_event(self) -> None:
+    video = Video(
+      title='Video',
+      description='',
+      launch_year=2025,
+      duration=120.0,
+      opened=True,
+      rating=Rating.L,
+      categories=set(),
+      genres=set(),
+      cast_members=set()
+    )
+
+    media = AudioVideoMedia(
+      name="video.mp4",
+      raw_location="raw/video.mp4",
+      encoded_location="encoded/video.mp4",
+      status=MediaStatus.COMPLETED,
+      media_type=MediaType.VIDEO,
+    )
+
+    video.update_video(media)
+
+    assert video.video == media
+
+    assert video.events == [
+      AudioVideoMediaUpdated(
+        aggregate_id=video.id,
+        file_path="raw/video.mp4",
+        media_type=MediaType.VIDEO,
+      )
+    ]
