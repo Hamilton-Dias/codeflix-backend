@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from uuid import UUID
 
+from src.core._shared.storage.abstract_storage_service import AbstractStorageService
 from src.core.video.application.exceptions import VideoNotFound
 from src.core.video.domain.value_objets import AudioVideoMedia, MediaStatus
 from src.core.video.domain.video_repository import VideoRepository
@@ -36,7 +37,7 @@ class UploadVideo:
     file_path = Path("videos") / str(video.id) / input.file_name
 
     self.storage_service.store(
-      file_path=file_path, 
+      file_path=str(file_path), 
       content=input.content, 
       content_type=input.content_type
     )
