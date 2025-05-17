@@ -7,8 +7,14 @@ class GenreOutputSerializer(serializers.Serializer):
   categories = serializers.ListField(child=serializers.UUIDField())
 
 
+class ListOutputMetaSerializer(serializers.Serializer):
+  current_page = serializers.IntegerField()
+  per_page = serializers.IntegerField()
+  total_items = serializers.IntegerField()
+
 class ListGenreOutputSerializer(serializers.Serializer):
   data = GenreOutputSerializer(many=True)
+  meta = ListOutputMetaSerializer()
 
 class SetField(serializers.ListField):
   def to_internal_value(self, data):

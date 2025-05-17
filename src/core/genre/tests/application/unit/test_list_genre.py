@@ -1,7 +1,7 @@
 from unittest.mock import create_autospec
 from src.core.genre.domain.genre import Genre
 from src.core.genre.domain.genre_repository import GenreRepository
-from src.core.genre.application.use_cases.list_genre import GenreOutput, ListGenre
+from src.core.genre.application.use_cases.list_genre import GenreOutput, ListGenre, ListOutputMeta
 
 
 class TestListGenre:
@@ -12,7 +12,14 @@ class TestListGenre:
     use_case = ListGenre(repository=mock)
 
     output = use_case.execute(input=ListGenre.Input())
-    assert output == ListGenre.Output(data=[])
+    assert output == ListGenre.Output(
+      data=[],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=0
+      )
+    )
 
   def test_when_genres_in_repository_then_return_list(self):
     genres = [
@@ -48,6 +55,11 @@ class TestListGenre:
           is_active=genres[1].is_active,
           categories=set()
         )
-      ]
+      ],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=2
+      )
     )
 

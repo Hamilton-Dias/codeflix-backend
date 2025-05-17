@@ -16,9 +16,11 @@ from src.django_project.genre_app.serializers import CreateGenreInputSerializer,
 class GenreViewSet(viewsets.ViewSet):
   def list(self, request: Request) -> Response:
     order_by = request.query_params.get("order_by", "name")
+    current_page = int(request.query_params.get("current_page", 1))
     use_case = ListGenre(repository=DjangoORMGenreRepository())
     output: ListGenre.Output = use_case.execute(input=ListGenre.Input(
-      order_by=order_by
+      order_by=order_by,
+      current_page=current_page
     ))
     reponse_serializer = ListGenreOutputSerializer(output)
     

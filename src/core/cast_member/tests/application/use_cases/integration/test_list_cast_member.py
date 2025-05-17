@@ -2,6 +2,7 @@ from src.core.cast_member.application.use_cases.list_cast_member import CastMemb
 from src.core.cast_member.domain.cast_member import CastMember, CastMemberType
 
 from src.core.cast_member.infra.in_memory_cast_member_repository import InMemoryCastMemberRepository
+from src.core.cast_member.application.use_cases.list_cast_member import ListOutputMeta
 
 
 class TestListCastMember:
@@ -12,7 +13,14 @@ class TestListCastMember:
 
     response = use_case.execute(request)
 
-    assert response == ListCastMemberResponse(data=[])
+    assert response == ListCastMemberResponse(
+      data=[],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=0
+      )
+    )
 
   def test_return_existing_cast_members(self):
     cast_members = [
@@ -49,6 +57,11 @@ class TestListCastMember:
           name=cast_members[1].name,
           type=cast_members[1].type
         )
-      ]
+      ],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=2
+      )
     )
 

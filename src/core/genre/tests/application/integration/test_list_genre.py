@@ -1,6 +1,6 @@
 from src.core.category.domain.category import Category
 from src.core.category.infra.in_memory_category_repository import InMemoryCategoryRepository
-from src.core.genre.application.use_cases.list_genre import GenreOutput, ListGenre
+from src.core.genre.application.use_cases.list_genre import GenreOutput, ListGenre, ListOutputMeta
 from src.core.genre.domain.genre import Genre
 from src.core.genre.infra.in_memory_genre_repository import InMemoryGenreRepository
 
@@ -37,7 +37,12 @@ class TestListGenre:
             documentary_category.id
           }
         )
-      ]
+      ],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=1
+      )
     )
 
   def test_list_with_empty_genres(self):
@@ -46,5 +51,12 @@ class TestListGenre:
     output = use_case.execute(input=ListGenre.Input())
 
     assert len(output.data) == 0
-    assert output == ListGenre.Output(data=[])
+    assert output == ListGenre.Output(
+      data=[],
+      meta=ListOutputMeta(
+        current_page=1,
+        per_page=2,
+        total_items=0
+      )
+    )
 

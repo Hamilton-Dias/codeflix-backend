@@ -50,7 +50,12 @@ class TestListAPI:
           "name": "Director",
           "type": CastMemberType.DIRECTOR,
         }
-      ]
+      ],
+      "meta": {
+        "current_page": 1,
+        "per_page": 2,
+        "total_items": 2
+      }
     }
 
     assert response.status_code == status.HTTP_200_OK
