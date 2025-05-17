@@ -77,6 +77,8 @@ class VideoModelMapper:
       description=model.description,
       launch_year=model.launch_year,
       duration=model.duration,
+      opened=model.opened,
+      published=model.published,
       rating=model.rating,
       categories=set(model.categories.values_list("id", flat=True)),
       genres=set(model.genres.values_list("id", flat=True)),
