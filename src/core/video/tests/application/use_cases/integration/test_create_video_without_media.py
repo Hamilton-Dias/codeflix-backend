@@ -83,7 +83,16 @@ class TestCreateVideoWithoutMedia:
 
   def test_execute_with_invalid_related_entities(self):
     video_repo = InMemoryVideoRepository()
-    use_case = CreateVideoWithoutMediaUseCase(video_repo)
+    category_repo = InMemoryCategoryRepository()
+    genre_repo = InMemoryGenreRepository()
+    cast_member_repo = InMemoryCastMemberRepository()
+
+    use_case = CreateVideoWithoutMediaUseCase(
+      video_repository=video_repo,
+      category_repository=category_repo,
+      cast_members_repository=cast_member_repo,
+      genres_repository=genre_repo
+    )
     
     fake_id = uuid.uuid4()
     input_data = CreateVideoWithoutMediaUseCase.Input(
@@ -91,10 +100,11 @@ class TestCreateVideoWithoutMedia:
       description="Test Description",
       launch_year=2023,
       duration=120,
+      published=False,
       rating=Rating.L,
-      categories=[fake_id],
-      genres=[fake_id],
-      cast_members=[fake_id]
+      categories={fake_id},
+      genres={fake_id},
+      cast_members={fake_id}
     )
     
     with pytest.raises(RelatedEntitiesNotFound):
