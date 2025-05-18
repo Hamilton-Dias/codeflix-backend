@@ -7,7 +7,7 @@ Application written in python 3 for Full Cycle 3.0 course.
 - Python venv
 - Django
 - RabbitMQ
-- Domain Events
+- Events Driven Archtecture
 - Unit and Integration tests
 - E2E Tests
 
@@ -18,5 +18,6 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
+docker run -d --hostname rabbitmq --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:3-management
 python manage.py runserver
 </pre>
