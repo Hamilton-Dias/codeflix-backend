@@ -7,6 +7,7 @@ from rest_framework.status import (
   HTTP_201_CREATED
 )
 
+from src.core._shared.events.message_bus import MessageBus
 from src.core._shared.infrastructure.storage.local_storage import LocalStorage
 from src.core.video.application.exceptions import InvalidVideo, RelatedEntitiesNotFound, VideoNotFound
 from src.core.video.application.use_cases.create_video_without_media import CreateVideoWithoutMediaUseCase
@@ -54,7 +55,8 @@ class VideoViewSet(viewsets.ViewSet):
 
     upload_video = UploadVideo(
       video_repository=DjangoORMVideoRepository(),
-      storage_service=LocalStorage()
+      storage_service=LocalStorage(),
+      message_bus=MessageBus()
     )
 
     try:
