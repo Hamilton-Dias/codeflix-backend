@@ -4,7 +4,7 @@ from uuid import UUID
 
 from src.core._shared.domain.entity import Entity
 from src.core.video.domain.events.event import AudioVideoMediaUpdated
-from src.core.video.domain.value_objets import AudioVideoMedia, ImageMedia, MediaType, Rating
+from src.core.video.domain.value_objets import AudioVideoMedia, ImageMedia, MediaStatus, MediaType, Rating
 
 
 @dataclass(eq=False)
@@ -39,6 +39,15 @@ class Video(Entity):
 
     if self.notification.has_errors:
       raise ValueError(self.notification.messages)
+    
+  def publish(self) -> None:
+    if not self.video:
+      self.notification.add_error("Video must have media to be published")
+    elif self.video.status != MediaStatus.COMPLETED:
+      self.notification.add_error("Video must be completed to be published")
+
+    self.published = True
+    self.validate()
 
   def update(self, title, description, launch_year, duration, published, rating, opened):
     self.title = title
@@ -88,3 +97,23 @@ class Video(Entity):
       media_type=MediaType.VIDEO
     ))
 
+  def process(self, status: MediaStatus, encoded_location: str) -> None:
+    if status == MediaStatus.COMPLETED:
+      self.video = AudioVideoMedia(
+        name=self.video.name,
+        raw_location=self.video.raw_location,
+        encoded_location=encoded_location,
+        status=MediaStatus.COMPLETED,
+        type=MediaType.VIDEO
+      )
+      self.publish()
+    else:
+      self.video = AudioVideoMedia(
+        name=self.video.name,
+        raw_location=self.video.raw_location,
+        encoded_location="",
+        status=MediaStatus.ERROR,
+        type=MediaType.VIDEO
+      )
+
+    self.validate()
