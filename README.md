@@ -19,5 +19,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 docker run -d --hostname rabbitmq --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+python manage.py startconsumer
 python manage.py runserver
 </pre>
