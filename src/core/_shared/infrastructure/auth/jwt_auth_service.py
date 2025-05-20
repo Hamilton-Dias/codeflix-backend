@@ -1,8 +1,10 @@
 import os
+import dotenv
 
 import jwt
 from src.core._shared.infrastructure.auth.auth_service_interface import AuthServiceInterface
 
+dotenv.load_dotenv()
 
 class JwtAuthService(AuthServiceInterface):
   def __init__(self, token: str = "") -> None:
