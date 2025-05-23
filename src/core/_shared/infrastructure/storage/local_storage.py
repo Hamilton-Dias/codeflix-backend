@@ -11,11 +11,11 @@ class LocalStorage(AbstractStorageService):
     if not self.bucket.exists():
       self.bucket.mkdir(parents=True)
 
-  def store(self, file_path: str, file_name: str, file_content: bytes) -> str:
+  def store(self, file_path: str, content: bytes, content_type: str) -> str:
     full_path = self.bucket / file_path
 
     if not full_path.parent.exists():
       full_path.parent.mkdir(parents=True)
 
     with open(full_path, 'wb') as file:
-      file.write(file_content)
+      file.write(content)

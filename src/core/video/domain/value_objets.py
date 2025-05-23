@@ -3,11 +3,11 @@ from enum import Enum, StrEnum, auto, unique
 from uuid import UUID
 
 @unique
-class MediaStatus(Enum):
-  PENDING = auto()
-  PROCESSING = auto()
-  COMPLETED = auto()
-  ERROR = auto()
+class MediaStatus(StrEnum):
+  PENDING = "PENDING"
+  PROCESSING = "PROCESSING"
+  COMPLETED = "COMPLETED"
+  ERROR = "ERROR"
 
 @unique
 class MediaType(StrEnum):

@@ -12,6 +12,7 @@ class DjangoORMVideoRepository(VideoRepository):
   def save(self, video: Video) -> None:
     with transaction.atomic():
       video_model = VideoORM.objects.create(
+        id=video.id,
         title=video.title,
         description=video.description,
         launch_year=video.launch_year,
@@ -20,6 +21,7 @@ class DjangoORMVideoRepository(VideoRepository):
         opened=video.opened,
         published=video.published,
       )
+      video_model.save()
       video_model.categories.set(video.categories)
       video_model.genres.set(video.genres)
       video_model.cast_members.set(video.cast_members)
@@ -78,7 +80,6 @@ class VideoModelMapper:
       launch_year=model.launch_year,
       duration=model.duration,
       opened=model.opened,
-      published=model.published,
       rating=model.rating,
       categories=set(model.categories.values_list("id", flat=True)),
       genres=set(model.genres.values_list("id", flat=True)),

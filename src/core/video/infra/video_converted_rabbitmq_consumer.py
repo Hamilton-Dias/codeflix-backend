@@ -50,7 +50,7 @@ class VideoConvertedRabbitMQConsumer(AbstractConsumer):
             use_case = ProcessAudioVideoMedia(video_repository=DjangoORMVideoRepository())
             use_case.execute(request=process_audio_video_media_input)
         except Exception as e:
-            logger.error(f"Error processing payload {message}", exc_info=True)
+            logger.error(f"Error processing payload {message} - {e}", exc_info=True)
             return
 
     def start(self):
