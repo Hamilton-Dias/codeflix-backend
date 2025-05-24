@@ -4,6 +4,7 @@ import pika
 import time
 from rest_framework.test import APIClient
 from django.core.files.uploadedfile import SimpleUploadedFile
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
 from src.django_project.video_app.models import Video as VideoORM
 
 from rest_framework.status import (
@@ -11,12 +12,13 @@ from rest_framework.status import (
 )
 
 @pytest.mark.django_db
-class TestCanSendVideoToRabbitMQAndUpdate:
+class TestCanSendVideoToRabbitMQAndUpdate(JWTAuthTestMixin):
   def test_can_send_video_to_rabbitmq_and_update(self) -> None:
-    api_client = APIClient()
+    self.client = APIClient()
+    self.authenticate_admin()
     
     # Cria categoria
-    create_response = api_client.post(
+    create_response = self.client.post(
       '/api/categories/', 
       data={
         "name": "Category 1",
@@ -27,7 +29,7 @@ class TestCanSendVideoToRabbitMQAndUpdate:
     created_category_id = create_response.data['id']
 
     # Cria gênero
-    genre_response = api_client.post(
+    genre_response = self.client.post(
       '/api/genres/', 
       data={
         "name": "Genre 1",
@@ -39,7 +41,7 @@ class TestCanSendVideoToRabbitMQAndUpdate:
     created_genre_id = genre_response.data['id']
 
     # Cria cast member
-    cast_member_response = api_client.post(
+    cast_member_response = self.client.post(
       '/api/cast_members/',
       data={
         "name": "Cast member 1",
@@ -51,7 +53,7 @@ class TestCanSendVideoToRabbitMQAndUpdate:
     created_cast_member_id = cast_member_response.data['id']
 
     # Cria video
-    video_response = api_client.post(
+    video_response = self.client.post(
       '/api/videos/',
       data={
         "title": "Sample Video",
@@ -80,7 +82,7 @@ class TestCanSendVideoToRabbitMQAndUpdate:
     )
     
     # Faz upload de media pro video
-    video_update_response = api_client.patch(
+    video_update_response = self.client.patch(
       f'/api/videos/{video_id}/',
       data={"video_file": video_file},
       format="multipart"

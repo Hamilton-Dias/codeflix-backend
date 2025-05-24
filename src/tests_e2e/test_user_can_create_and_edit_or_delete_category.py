@@ -1,13 +1,16 @@
 import pytest
 from rest_framework.test import APIClient
 
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
+
 @pytest.mark.django_db
-class TestCreateAndEditOrDeleteCategory:
+class TestCreateAndEditOrDeleteCategory(JWTAuthTestMixin):
   def test_user_can_create_and_edit_category(self) -> None:
-    api_client = APIClient()
+    self.client = APIClient()
+    self.authenticate_admin()
 
     # Verifica que lista esta vazia
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [],
       "meta": {
@@ -18,7 +21,7 @@ class TestCreateAndEditOrDeleteCategory:
     }
 
     # Criar uma categoria
-    create_response = api_client.post(
+    create_response = self.client.post(
       '/api/categories/', 
       data={
         "name": "Category 1",
@@ -29,7 +32,7 @@ class TestCreateAndEditOrDeleteCategory:
     created_category_id = create_response.data['id']
 
     # Verifica que categoria criada aparece na listagem
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [
         {
@@ -47,7 +50,7 @@ class TestCreateAndEditOrDeleteCategory:
     }
 
     # Edita categoria criada
-    update_request = api_client.put(
+    update_request = self.client.put(
       f'/api/categories/{created_category_id}/',
       data={
         "name": "Category 1 updated",
@@ -58,7 +61,7 @@ class TestCreateAndEditOrDeleteCategory:
     assert update_request.status_code == 204
 
     # Verifica que categoria editada aparece na listagem
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [
         {
@@ -76,10 +79,10 @@ class TestCreateAndEditOrDeleteCategory:
     }
 
   def test_user_can_create_and_delete_category(self) -> None:
-    api_client = APIClient()
+    self.client = APIClient()
 
     # Verifica que lista esta vazia
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [],
       "meta": {
@@ -90,7 +93,7 @@ class TestCreateAndEditOrDeleteCategory:
     }
 
     # Criar uma categoria
-    create_response = api_client.post(
+    create_response = self.client.post(
       '/api/categories/', 
       data={
         "name": "Category 1",
@@ -101,7 +104,7 @@ class TestCreateAndEditOrDeleteCategory:
     created_category_id = create_response.data['id']
 
     # Verifica que categoria criada aparece na listagem
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [
         {
@@ -119,11 +122,11 @@ class TestCreateAndEditOrDeleteCategory:
     }
 
     # deleta categoria criada
-    update_request = api_client.delete(f'/api/categories/{created_category_id}/')
+    update_request = self.client.delete(f'/api/categories/{created_category_id}/')
     assert update_request.status_code == 204
 
     # Verifica que categoria editada aparece na listagem
-    list_response = api_client.get('/api/categories/')
+    list_response = self.client.get('/api/categories/')
     assert list_response.data == {
       "data": [],
       "meta": {

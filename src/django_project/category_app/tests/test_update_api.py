@@ -5,14 +5,19 @@ from src.core.category.domain.category import Category
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from rest_framework import status
 
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
+
 @pytest.fixture
 def category_repository() -> DjangoORMCategoryRepository:
   return DjangoORMCategoryRepository()
 
 @pytest.mark.django_db
-class TestUpdateAPI:
+class TestUpdateAPI(JWTAuthTestMixin):
   def test_when_payload_is_invalid_then_return_400(self):
-    response = APIClient().put('/api/categories/123123123/', data={
+    self.client = APIClient()
+    self.authenticate_admin()
+
+    response = self.client.put('/api/categories/123123123/', data={
       "name": "", 
       "description": "test"
     })
@@ -25,10 +30,12 @@ class TestUpdateAPI:
     }
 
   def test_when_payload_is_valid_then_return_200(self, category_repository: DjangoORMCategoryRepository):
+    self.client = APIClient()
+    self.authenticate_admin()
     category = Category(name="Movie")
     category_repository.save(category)
 
-    response = APIClient().put(f'/api/categories/{category.id}/', data={
+    response = self.client.put(f'/api/categories/{category.id}/', data={
       "name": "Movie 2",
       "description": "description",
       "is_active": False
@@ -42,7 +49,9 @@ class TestUpdateAPI:
     assert updated_category.is_active == False
 
   def test_when_category_not_found_then_return_404(self):
-    response = APIClient().put(f'/api/categories/{uuid.uuid4()}/', data={
+    self.client = APIClient()
+    self.authenticate_admin()
+    response = self.client.put(f'/api/categories/{uuid.uuid4()}/', data={
       "name": "Movie 2",
       "description": "description",
       "is_active": False

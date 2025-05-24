@@ -3,9 +3,11 @@ from rest_framework.status import HTTP_200_OK
 
 from src.core.category.domain.category import Category
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
 
-class TestListAPI(APITestCase):
+class TestListAPI(APITestCase, JWTAuthTestMixin):
   def test_list_categories(self):
+    self.authenticate_admin()
     category_movie = Category(
       name='Movie',
       description='Movie description'

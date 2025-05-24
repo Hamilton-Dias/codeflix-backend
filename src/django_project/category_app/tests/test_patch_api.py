@@ -5,6 +5,8 @@ from src.core.category.domain.category import Category
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from rest_framework import status
 
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
+
 @pytest.fixture
 def category_movie() -> Category:
   return Category(name="Movie", description="Movie description", is_active=True)
@@ -14,9 +16,12 @@ def category_repository() -> DjangoORMCategoryRepository:
   return DjangoORMCategoryRepository()
 
 @pytest.mark.django_db
-class TestPatchAPI:
+class TestPatchAPI(JWTAuthTestMixin):
   def test_when_id_is_invalid_then_return_400(self):
-    response = APIClient().patch('/api/categories/123123123/', data={
+    self.client = APIClient()
+    self.authenticate_admin()
+
+    response = self.client.patch('/api/categories/123123123/', data={
       "description": "test"
     })
 
@@ -30,9 +35,12 @@ class TestPatchAPI:
     category_movie: Category,
     category_repository: DjangoORMCategoryRepository
   ):
+    self.client = APIClient()
+    self.authenticate_admin()
+
     category_repository.save(category_movie)
 
-    response = APIClient().patch(f'/api/categories/{category_movie.id}/', data={
+    response = self.client.patch(f'/api/categories/{category_movie.id}/', data={
       "name": "Movie 2",
     })
 
@@ -48,9 +56,12 @@ class TestPatchAPI:
     category_movie: Category,
     category_repository: DjangoORMCategoryRepository
   ):
+    self.client = APIClient()
+    self.authenticate_admin()
+
     category_repository.save(category_movie)
 
-    response = APIClient().patch(f'/api/categories/{category_movie.id}/', data={
+    response = self.client.patch(f'/api/categories/{category_movie.id}/', data={
       "description": "description 2",
     })
 
@@ -68,9 +79,12 @@ class TestPatchAPI:
     category_movie: Category,
     category_repository: DjangoORMCategoryRepository
   ):
+    self.client = APIClient()
+    self.authenticate_admin()
+
     category_repository.save(category_movie)
 
-    response = APIClient().patch(f'/api/categories/{category_movie.id}/', data={
+    response = self.client.patch(f'/api/categories/{category_movie.id}/', data={
       "is_active": False,
     })
 
@@ -82,7 +96,10 @@ class TestPatchAPI:
     assert updated_category.is_active == False
 
   def test_when_category_not_found_then_return_404(self):
-    response = APIClient().patch(f'/api/categories/{uuid.uuid4()}/', data={
+    self.client = APIClient()
+    self.authenticate_admin()
+
+    response = self.client.patch(f'/api/categories/{uuid.uuid4()}/', data={
       "name": "Movie 2",
     })
 

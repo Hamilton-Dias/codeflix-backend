@@ -5,14 +5,18 @@ from src.core.category.domain.category import Category
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 from rest_framework import status
 
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
+
 @pytest.fixture
 def category_repository() -> DjangoORMCategoryRepository:
   return DjangoORMCategoryRepository()
 
 @pytest.mark.django_db
-class TestCreateAPI:
+class TestCreateAPI(JWTAuthTestMixin):
   def test_when_payload_is_invalid_then_return_400(self) -> None:
-    response = APIClient().post("/api/categories/", data={
+    self.client = APIClient()
+    self.authenticate_admin()
+    response = self.client.post("/api/categories/", data={
       "name": "",
       "description": "Movie description"
     })
@@ -20,7 +24,9 @@ class TestCreateAPI:
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
   def test_when_payload_is_valid_then_return_201(self, category_repository: DjangoORMCategoryRepository) -> None:
-    response = APIClient().post("/api/categories/", data={
+    self.client = APIClient()
+    self.authenticate_admin()
+    response = self.client.post("/api/categories/", data={
       "name": "Movie",
       "description": "Movie description"
     })

@@ -5,6 +5,8 @@ from rest_framework.test import APIClient
 
 from src.core.cast_member.domain.cast_member import CastMember, CastMemberType
 from src.django_project.cast_member_app.repository import DjangoORMCastMemberRepository
+from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
+from rest_framework.test import APITestCase
 
 @pytest.fixture
 def actor():
@@ -25,18 +27,21 @@ def cast_member_repository() -> DjangoORMCastMemberRepository:
   return DjangoORMCastMemberRepository()
 
 @pytest.mark.django_db
-class TestListAPI:
+class TestListAPI(JWTAuthTestMixin):
   def test_list_cast_members(
     self,
     actor: CastMember,
     director: CastMember,
     cast_member_repository: DjangoORMCastMemberRepository,
   ) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
+
     cast_member_repository.save(actor)
     cast_member_repository.save(director)
 
     url = "/api/cast_members/"
-    response = APIClient().get(url)
+    response = self.client.get(url)
 
     expected_data = {
       "data": [
@@ -63,18 +68,20 @@ class TestListAPI:
 
 
 @pytest.mark.django_db
-class TestCreateAPI:
+class TestCreateAPI(JWTAuthTestMixin):
   def test_when_request_data_is_valid_then_create_cast_member(
     self,
     cast_member_repository: DjangoORMCastMemberRepository,
   ) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
 
     url = "/api/cast_members/"
     data = {
       "name": "Actor",
       "type": "ACTOR"
     }
-    response = APIClient().post(url, data=data)
+    response = self.client.post(url, data=data)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["id"]
@@ -87,12 +94,15 @@ class TestCreateAPI:
     )
 
   def test_when_request_data_is_invalid_then_return_400(self) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
+
     url = "/api/cast_members/"
     data = {
       "name": "",
       "type": "",
     }
-    response = APIClient().post(url, data=data)
+    response = self.client.post(url, data=data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data == {
@@ -102,12 +112,15 @@ class TestCreateAPI:
 
 
 @pytest.mark.django_db
-class TestUpdateAPI:
+class TestUpdateAPI(JWTAuthTestMixin):
   def test_when_request_data_is_valid_then_update_cast_member(
     self,
     actor: CastMember,
     cast_member_repository: DjangoORMCastMemberRepository,
   ) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
+
     cast_member_repository.save(actor)
 
     url = f"/api/cast_members/{actor.id}/"
@@ -115,7 +128,7 @@ class TestUpdateAPI:
       "name": "Another Actor",
       "type": CastMemberType.DIRECTOR,
     }
-    response = APIClient().put(url, data=data)
+    response = self.client.put(url, data=data)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert not response.data
@@ -124,11 +137,14 @@ class TestUpdateAPI:
     assert updated_cast_member.type == CastMemberType.DIRECTOR
 
   def test_when_request_data_is_invalid_then_return_400(self) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
+
     url = f"/api/cast_members/123412341234123/"
     data = {
       "name": "",
     }
-    response = APIClient().put(url, data=data)
+    response = self.client.put(url, data=data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data == {
@@ -140,27 +156,34 @@ class TestUpdateAPI:
   def test_when_cast_member_with_id_does_not_exist_then_return_404(
     self,
   ) -> None:
+    self.client = APIClient()
+    self.authenticate_admin()
+
     url = f"/api/cast_members/{uuid4()}/"
     data = {
       "name": "Not Actor",
       "type": CastMemberType.DIRECTOR,
     }
-    response = APIClient().put(url, data=data)
+    response = self.client.put(url, data=data)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db
-class TestDeleteAPI:
+class TestDeleteAPI(JWTAuthTestMixin):
   def test_when_cast_member_found_then_delete_cast_member(
     self,
     actor: CastMember,
     cast_member_repository: DjangoORMCastMemberRepository,
   ) -> None:
+    
+    self.client = APIClient()
+    self.authenticate_admin()
+
     cast_member_repository.save(actor)
     
     url = f"/api/cast_members/{actor.id}/"
-    response = APIClient().delete(url)
+    response = self.client.delete(url)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert not response.data
