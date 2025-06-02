@@ -80,6 +80,7 @@ class TestCreateAndEditOrDeleteCategory(JWTAuthTestMixin):
 
   def test_user_can_create_and_delete_category(self) -> None:
     self.client = APIClient()
+    self.authenticate_admin()
 
     # Verifica que lista esta vazia
     list_response = self.client.get('/api/categories/')
