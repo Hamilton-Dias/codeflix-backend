@@ -64,6 +64,19 @@ class VideoConvertedRabbitMQConsumer(AbstractConsumer):
         print('Consumer started. Waiting for messages. To exit press CTRL+C')
         self.channel.start_consuming()
 
+    def consumeOne(self, channel):
+        # self.connection = pika.BlockingConnection(pika.ConnectionParameters(self.host))
+        # self.channel = self.connection.channel()
+
+        # Cria a fila se não existir
+        channel.queue_declare(queue=self.queue)
+        method_frame, header_frame, body = channel.basic_get(queue=self.queue, auto_ack=True)
+        if method_frame:
+            self.on_message(body)
+            return True
+        else:
+            return False
+
     def on_message_callback(self, ch, method, properties, body):
         self.on_message(body)
 

@@ -104,7 +104,7 @@ class Video(Entity):
         raw_location=self.video.raw_location,
         encoded_location=encoded_location,
         status=MediaStatus.COMPLETED,
-        type=MediaType.VIDEO
+        media_type=MediaType.VIDEO
       )
       self.publish()
     else:
@@ -113,7 +113,7 @@ class Video(Entity):
         raw_location=self.video.raw_location,
         encoded_location="",
         status=MediaStatus.ERROR,
-        type=MediaType.VIDEO
+        media_type=MediaType.VIDEO
       )
 
     self.validate()

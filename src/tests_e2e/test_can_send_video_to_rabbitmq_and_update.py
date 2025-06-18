@@ -1,9 +1,9 @@
 import pytest
 import json
 import pika
-import time
 from rest_framework.test import APIClient
 from django.core.files.uploadedfile import SimpleUploadedFile
+from src.core.video.infra.video_converted_rabbitmq_consumer import VideoConvertedRabbitMQConsumer
 from src.django_project.jwt_auth_test_mixin import JWTAuthTestMixin
 from src.django_project.video_app.models import Video as VideoORM
 
@@ -118,9 +118,12 @@ class TestCanSendVideoToRabbitMQAndUpdate(JWTAuthTestMixin):
     }
     channel.basic_publish(exchange='', routing_key=QUEUE, body=json.dumps(message))
 
-    print("Sent message")
+    consumer = VideoConvertedRabbitMQConsumer()
+    is_consumed = consumer.consumeOne(channel)
+
+    assert is_consumed is True
+
     connection.close()
-    time.sleep(1)
 
     video_processed = VideoORM.objects.get(id=video_id)
     assert video_processed is not None
