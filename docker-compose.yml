@@ -105,6 +105,20 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
+  elasticsearch-test:
+    container_name: elasticsearch-test
+    hostname: elasticsearch-test
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    ports:
+      - "9201:9200"  # Vamos usar a porta 9201 no host
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"  # Limitar memória para 128MB, evitar exit code 137. Atualizar elastisearch.
+      - "indices.fielddata.cache.size=5%"
+    profiles:
+      - test  # Para garantir que `docker compose up` não suba o container de testes automaticamente.
+
 volumes:
   mysql-data:
   kafka-data:
