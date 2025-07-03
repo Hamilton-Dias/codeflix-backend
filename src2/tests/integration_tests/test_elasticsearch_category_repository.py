@@ -6,9 +6,9 @@ from uuid import uuid4
 import pytest
 from elasticsearch import Elasticsearch
 
-from src2.category import Category
-from src2.category_repository import SortDirection
-from src2.elasticsearch_category_repository import (
+from src2.domain.category import Category
+from src2.domain.category_repository import SortDirection
+from src2.infra.elasticsearch.elasticsearch_category_repository import (
   ElasticsearchCategoryRepository,
   ELASTICSEARCH_HOST_TEST,
 )

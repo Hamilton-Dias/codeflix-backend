@@ -4,8 +4,8 @@ import os
 from elasticsearch import Elasticsearch
 from pydantic import ValidationError
 
-from src2.category import Category
-from src2.category_repository import (
+from src2.domain.category import Category
+from src2.domain.category_repository import (
   CategoryRepository,
   DEFAULT_PAGINATION_SIZE,
   SortDirection,

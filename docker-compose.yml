@@ -119,6 +119,23 @@ services:
     profiles:
       - test  # Para garantir que `docker compose up` não suba o container de testes automaticamente.
 
+  tests:
+    build: .
+    environment:
+      PYTHONPATH: "/app"
+      ELASTICSEARCH_TEST_HOST: "http://elasticsearch-test:9200"  # elasticsearch-test ao inves de localhost!
+    container_name: tests
+    command: [ "pytest", "-vv", "-s"]
+    depends_on:
+      elasticsearch-test:
+        condition: service_healthy
+    profiles:
+      - test  # subir junto com o elasticsearch-test
+    ports:
+      - "5678:5678"  # Expor uma porta para o debugger no host
+    volumes:
+      - .:/app
+
 volumes:
   mysql-data:
   kafka-data:
