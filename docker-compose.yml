@@ -1,3 +1,16 @@
+x-elasticsearch-base: &elasticsearch-base
+  image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+  environment:
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+    - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    - "indices.fielddata.cache.size=5%"
+  healthcheck:
+    test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+    interval: 30s
+    timeout: 10s
+    retries: 5
+
 services:
   mysql:
     container_name: mysql
@@ -89,50 +102,37 @@ services:
     restart: "no"
 
   elasticsearch:
+    <<: *elasticsearch-base
     container_name: elasticsearch
     hostname: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     ports:
       - "9200:9200"
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
   elasticsearch-test:
+    <<: *elasticsearch-base
     container_name: elasticsearch-test
     hostname: elasticsearch-test
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     ports:
-      - "9201:9200"  # Vamos usar a porta 9201 no host
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"  # Limitar memória para 128MB, evitar exit code 137. Atualizar elastisearch.
-      - "indices.fielddata.cache.size=5%"
+      - "9201:9200"
     profiles:
-      - test  # Para garantir que `docker compose up` não suba o container de testes automaticamente.
+      - test
 
   tests:
     build: .
     environment:
       PYTHONPATH: "/app"
-      ELASTICSEARCH_TEST_HOST: "http://elasticsearch-test:9200"  # elasticsearch-test ao inves de localhost!
+      ELASTICSEARCH_TEST_HOST: "http://elasticsearch-test:9200"
     container_name: tests
-    command: [ "pytest", "-vv", "-s"]
+    command: [ "pytest", "-vv", "-s" ]
     depends_on:
       elasticsearch-test:
         condition: service_healthy
     profiles:
-      - test  # subir junto com o elasticsearch-test
+      - test
     ports:
-      - "5678:5678"  # Expor uma porta para o debugger no host
+      - "5678:5678"  # Debug port
     volumes:
       - .:/app
 
@@ -145,7 +145,7 @@ services:
       ELASTICSEARCH_HOST: "http://elasticsearch:9200"
     ports:
       - "8000:8000"
-    command: fastapi dev src2/infra/api/http/main.py --host 0.0.0.0 --port 8000 --reload;
+    command: fastapi dev src/infra/api/http/main.py --host 0.0.0.0 --port 8000 --reload;
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -154,6 +154,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    volumes:
+      - .:/app
+
 
 volumes:
   mysql-data:
