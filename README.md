@@ -34,3 +34,4 @@ The admin users will need the codeflix-admin to manage the videos. Technologies 
 - Elasticsearch
 - Kafka
 - Kafka connect
+- GraphQL

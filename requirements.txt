@@ -10,3 +10,4 @@ cryptography==45.0.2
 python-dotenv==1.1.0
 elasticsearch==8.13.2
 fastapi[standard]==0.115.4
+strawberry-graphql==0.254.0
